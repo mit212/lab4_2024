@@ -1,4 +1,4 @@
-# Lab 3: 2-DoF Robot Pt.2
+# Lab 4: 2-DoF Robot Pt.3
 
 2.12/2.120 Intro to Robotics  
 Spring 2024[^1]
