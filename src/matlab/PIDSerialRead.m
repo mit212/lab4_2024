@@ -4,6 +4,7 @@
 %           Version 5.0 (09/24/2020) H.C.
 %           Version 6.0 (10/13/2021) H.C.
 %           Version 7.0 (02/21/2022) H.C.
+%           Version 8.0 (02/21/2024) Jinger Chong
 %
 
 % make sure no residual serial object in Matlab workspace
@@ -17,15 +18,14 @@ close all
 clear data data_char status
 delete(instrfind);
 
-% modify data labels for the 3 signals here
-Labels = {'Signal 1','Signal 2','Signal 3'};
+% change data labels for the 3 signals here
+labels = {'Setpoint','Position','Control Effort'};
 
 try
 
 % define serial object with matching com port and baud rate
-% change com port number and/or baud rate if needed
-
-s1 = serialport("COM15",115200);       % Windows
+% TODO: Change COM port to match VSCode
+s1 = serialport("COM18",115200);       % Windows
 % s1 = serialport("/dev/cu.usbmodem144101",115200);        % MacOS
 
 disp(' ');
@@ -36,7 +36,6 @@ disp(' ');
 status = getpinstatus(s1);
 %configureTerminator(s1,"LF");
 
-
 % initialize variables
 i = 1;
 
@@ -46,6 +45,7 @@ hFig.Name = 'Serial Data Plot';
 ax = axes(hFig);
 ax.Units = 'normalized';
 ax.Position = [0.125 0.15 0.775 0.775];
+
 hButton = uicontrol(hFig,'Style','pushbutton');
 hButton.String = 'STOP';
 hButton.BackgroundColor = [1 0 0];
@@ -53,30 +53,38 @@ hButton.ForegroundColor = [1 1 1];
 hButton.FontWeight = 'bold';
 hButton.UserData = 0;
 
+stringFormat = 'k_p=%.2f  k_i=%.2f  k_d=%.2f';
+k = [0 0 0];
+t = text(0.98,0.02, sprintf(stringFormat, k(1), k(2), k(3)), ...
+    'HorizontalAlignment','right','VerticalAlignment','bottom', 'Units','normalized');
+
 % here we define 3 data lines, add or substract lines if needed
 h1 = animatedline ('Color','g');
 h2 = animatedline ('Color','b');
 h3 = animatedline ('Color','r');
 
-title('Streaming Serial Data <Press the STOP button to end>')
+title('Streaming Serial Data <Press STOP button to end>')
 xlabel('Time (sec)'),ylabel('Values'), grid
-legend(Labels);
+legend(labels, 'Location', 'northwest');
 
 % get data from the serial object till the STOP button is pressed
 while ( hButton.UserData == 0 )
-
+    
     data_char{i} = readline(s1);
     
     if(~strcmp(data_char{i},''))
-        data(i,:) = str2num(data_char{i});
+        data_num = str2num(data_char{i});
+        data(i,:) = data_num(1:4);
+        k = data_num(5:end);
     else
         break;
     end
     
     addpoints(h1, data(i,1), data(i,2));
     addpoints(h2, data(i,1), data(i,3));
-    addpoints(h3, data(i,1), data(i,4));
-    legend(Labels);
+    %addpoints(h3, data(i,1), data(i,4));
+    t.String = sprintf(stringFormat, k(1), k(2), k(3));
+    legend(labels, 'Location', 'northwest');
 
     drawnow limitrate
     hButton.Callback = ['hButton.UserData = 1;','disp(''Stopping data collection...'')'];
@@ -92,7 +100,9 @@ figure(1)
 plot(data(:,1), data(:,2),'g', data(:,1), data(:,3),'b', data(:,1), data(:,4),'r')
 title('Serial Data')
 xlabel('Time (sec)'),ylabel('Values'), grid
-legend(Labels);
+t = text(0.98,0.02, sprintf(stringFormat,  k(1), k(2), k(3)), ...
+    'HorizontalAlignment','right','VerticalAlignment','bottom', 'Units','normalized');
+legend(labels, 'Location', 'northwest');
 
 dt = mean(diff(data(:,1)));
 disp(['Sampling period (sec) = ', num2str(dt)])
@@ -105,7 +115,7 @@ clear s1;
 catch ME
     warn_string = ["1. Check if Serial Port ID is set correctly.",...
         "2. Make sure Serial Monitor or Plotter is not running.",...
-        "3. #define MATLAB_SERIAL_READ in Arduino code is enabled.",... 
+        "3. #define MatlabPlot in PlatformIO code is enabled.",... 
         "4. Do not close the figure window while the program is running.",...
         "5. Hit a key on the keyboard while the real-time graph",...
         "     is active to exit the program properly."];   
@@ -118,5 +128,6 @@ catch ME
         clear s1;
     end
 end
+
 % Use the command below to force clear any hidden com port if needed
 % delete(instrfind);

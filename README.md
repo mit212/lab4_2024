@@ -1,38 +1,59 @@
-# Lab 4: 2-DoF Robot Pt.3
+# Lab 4: PID Tuning and Wireless Comms
 
 2.12/2.120 Intro to Robotics  
 Spring 2024[^1]
 
-- [1 Validate Hardware Setup](#1-validate-hardware-setup)
-  - [1.1 Validate Encoders](#11-validate-encoders)
-  - [1.2 Validate Motors](#12-validate-motors)
-  - [1.3 Validate Joystick](#13-validate-joystick)
-- [2 Potentiometers](#2-potentiometers)
-  - [2.1 Wire Potentiometers](#21-wire-potentiometers)
-  - [2.2 Read Potentiometers](#22-read-potentiometers)
-- [3 Forward Kinematics](#3-forward-kinematics)
-- [4 Validate Serial Read](#4-validate-serial-read)
-- [5 Tune PID Using Potentiometers](#5-tune-pid-using-potentiometers)
-  - [5.1 Constant Setpoint](#51-constant-setpoint)
-  - [5.2 Step Response in Joint Space](#52-step-response-in-joint-space)
-- [6 Inverse Kinematics](#6-inverse-kinematics)
-- [7 Cartesian Space](#7-cartesian-space)
-  - [7.1 Horizontal Line](#71-horizontal-line)
-  - [7.2 Vertical](#72-vertical)
-  - [7.3 Joystick](#73-joystick)
-- [8 Feedback Form](#8-feedback-form)
+- [Lab 4: PID Tuning and Wireless Comms](#lab-4-pid-tuning-and-wireless-comms)
+  - [1 Validate Hardware Setup](#1-validate-hardware-setup)
+    - [1.1 Validate Microcontroller](#11-validate-microcontroller)
+    - [1.2 Validate Motors](#12-validate-motors)
+    - [1.3 Validate Encoders](#13-validate-encoders)
+    - [1.4 Validate Joystick](#14-validate-joystick)
+  - [2 Potentiometers](#2-potentiometers)
+    - [2.1 Wire Potentiometers](#21-wire-potentiometers)
+    - [2.2 Read Potentiometers](#22-read-potentiometers)
+  - [3 Tune PID Using Potentiometers](#3-tune-pid-using-potentiometers)
+    - [3.1 Constant Setpoint](#31-constant-setpoint)
+    - [3.2 Step Response in Joint Space](#32-step-response-in-joint-space)
+  - [4 Joystick Control](#4-joystick-control)
+  - [5 Make It Wireless!](#5-make-it-wireless)
+  - [6 are there other sensors we want to expose them to in this lab?](#6-are-there-other-sensors-we-want-to-expose-them-to-in-this-lab)
+  - [7 Feedback Form](#7-feedback-form)
 
 ## 1 Validate Hardware Setup
 Estimated time of completion: 10 min
 
-### 1.1 Validate Encoders
-Run `test_code/encoder_test.cpp` to validate your encoder setup. Remember to open the Serial Monitor to see the output. Make sure that both the direction and the magnitude make sense!
+Like in the previous labs, we first want to make sure the parts work individually! Faulty wiring or hardware can be very difficult to debug in complex systems.
+
+### 1.1 Validate Microcontroller
+
+**Make sure that motor power is turned off any time you are uploading code to your microcontroller.** The arm has a tendency to spin around and hit itself if motor power is on during upload. As a reminder, motor power should only be on when you expect the motors to move. Otherwise, please keep motor power off. 
+
+<details> <summary> <i> How to know if the motor power is on? </i> </summary>
+
+The yellow LED on the motor driver indicates whether motor power is on or off.
+</details>
+
+Clone this repository and run `robot/blink_test.cpp`. You should see the onboard LED change colors! 
+
+<details> <summary> <i> Forget how to clone? </i> </summary>
+
+Please refer to the [instructions from Lab 1](
+https://github.com/mit212/lab1_2024?tab=readme-ov-file#31-git-clone).
+
+</details>
 
 ### 1.2 Validate Motors
-Run `test_code/motor_drive_test.cpp` to validate your motor setup. You should see both motors oscillating back and forth.
 
-### 1.3 Validate Joystick
-Run `lab_code/joystick.cpp` and `test_code/joystick_test.cpp` to validate your joystick setup.
+Orient the arm straight up, in default starting position. Run `test_code/motor_drive_test.cpp` to validate your motor setup. You should see both motors oscillating back and forth. Remember, motor 1 is attached to the base and motor 2 is attached to the second link. 
+
+### 1.3 Validate Encoders
+
+Run `test_code/encoder_test.cpp` to validate your encoder setup. Open the Serial Monitor to see the output and confirm that both the direction and the magnitude make sense!
+
+### 1.4 Validate Joystick
+
+Run `lab_code/joystick.cpp` and `test_code/joystick_test.cpp` to validate your joystick setup. **This means you should move both files into the `robot/` directory.** You should be able to see joystick readings within the range `[-1, 1]`.
 
 ## 2 Potentiometers
 Estimated time of completion: 25 min
@@ -50,71 +71,30 @@ We will be using potentiometers to quickly and easily tune our PID controller wi
 ### 2.2 Read Potentiometers
 Complete the `TODO`s in `include/pinout.h`, `include/potentiometer.h` and `lab_code/potentiometer.cpp`. To validate your code, run `lab_code/potentiometer.cpp` and `test_code/potentiometer_test.cpp`.
 
-## 3 Forward Kinematics
-Estimated time of completion: 10 min
-
-First, derive the forward kinematic equations for a 2-DoF arm. In other words, derive equations for `x` and `y` in terms of <code>Θ<sub>1</sub></code> and <code>Θ<sub>2</sub></code>.
-
-<p align="center">
-<img src="./.images/2dofarm.png" alt="drawing" width="300"/>
-</p>
-
-<details>
-<summary><i> What is forward kinematics? </i></summary>
-
-Forward kinematics answers the question, "Given the angles of the robot's joints, what are the x, y coordinates of the robot's hand?" For more, refer to lecture 2!
-
-</details>
-
-To validate your derived equations, first move your robotic arm to the angles `(pi/2, 0)` (pointing straight forward). Then, run `lab_code/kinematics.cpp` and `test_code/forward_kinematics_test.cpp`. You should see the Serial Monitor printing the `x` and `y` real-life coordinates of the marker holder in centimeters (e.g. at the angle `(pi/2, 0)`, `x=0` and `y~=38`).
-
-## 4 Validate Serial Read
-Estimated time of completion: 10 min
-
-
-## 5 Tune PID Using Potentiometers
+## 3 Tune PID Using Potentiometers
 Estimated time of completion: 20 min
 
 We will be using the file `lab_code/pid_tune.cpp` to tune our PID controller.
 
-### 5.1 Constant Setpoint
-First, define the setpoint to be `(pi/2, 0)` in joint space by uncommenting `#define Constant` and commenting out `#define SquareWave`. Then, use the potentiometers to change the PID gains. If your PID controller is properly tuned and you disturb the arm in any direction, the arm should quickly return to the setpoint `(pi/2, 0)` with minimal overshoot, oscillations, and steady state error. You can validate the response using Serial Read.
+### 3.1 Constant Setpoint
+First, define the setpoint to be `(M_PI/2, 0)` in joint space by uncommenting `#define Constant` and commenting out `#define SquareWave`. Then, use the potentiometers to change the PID gains. If your PID controller is properly tuned and you disturb the arm in any direction, the arm should quickly return to the setpoint `(M_PI/2, 0)` with minimal overshoot, oscillations, and steady state error. You can validate the response by running `matlab/PIDSerialRead.m`.
 
-### 5.2 Step Response in Joint Space
+### 3.2 Step Response in Joint Space
 Once the PID controller is properly tuned to follow a constant setpoint, the next step is to follow a square wave in joint space by commenting out `#define Constant` and uncommenting `#define SquareWave`. Once again, the step response should have minimal overshoot, oscillations, and steady state error.
 
-## 6 Inverse Kinematics
+## 4 Joystick Control
 Estimated time of completion: 10 min
 
-Using the forward kinematic equations you found, derive the inverse kinematic equations for a 2-DoF arm. In other words, derive equations for <code>Θ<sub>1</sub></code> and <code>Θ<sub>2</sub></code> in terms of `x` and `y`.
+Open `drawing.cpp` and update gains. Then run it with joystick control, see if that works better than last lab.
 
-<details>
-<summary><i> What is inverse kinematics? </i></summary>
+## 5 Make It Wireless!
 
-It's the opposite of forward kinematics!
-Put simply, forward inverse kinematics answers the question, "Given the desired x,y coordinates of the robot's hand, what should the angles of the robot's joints be?" For more, refer to lecture 2!
+Rewire so that joystick on a separate system
+Enable wireless comms code
 
-</details>
+## 6 are there other sensors we want to expose them to in this lab?
 
-Then, translate your derived equations into code by completing the `TODO 2`s in `kinematics.cpp`.
-
-To validate your derived equations, run `lab_code/kinematics.cpp` and `test_code/inverse_kinematics_test.cpp`. You should see `theta1_error` and `theta2_error` be 0.
-
-## 7 Cartesian Space
-Estimated time of completion: 10 min
-
-Now that we tuned our PID controller and implemented inverse kinematics, we can follow any trajectory we want in Cartesian space!
-
-### 7.1 Horizontal Line
-Set the setpoint to be a horizontal line in Cartesian space.
-
-### 7.2 Vertical 
-Set the setpoint to be a vertical line in Cartesian space.
-
-### 7.3 Joystick
-Set the setpoint to be the reading from your joystick.
-
-## 8 Feedback Form
+## 7 Feedback Form
 
 Before you leave, please fill out https://tinyurl.com/212-feedback. 
 
@@ -123,4 +103,7 @@ Before you leave, please fill out https://tinyurl.com/212-feedback.
 | Show the feedback form completion screen to a TA or LA. |
 
 
-[^1]: Version 1 - 2024: Jinger Chong, Josh Sohn
+[^1]: Version 1 - 2020: Dr. Harrison Chin  
+  Version 2 - 2021: Phillip Daniel  
+  Version 3 - 2023: Ravi Tejwani and Kentaro Barhydt  
+  Version 4 - 2024: Jinger Chong, Josh Sohn

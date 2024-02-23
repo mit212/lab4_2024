@@ -12,7 +12,7 @@ void setup() {
 
 void loop() {
     pot = readPot();
-    Serial.printf("Reading: %d\n", pot);
+    Serial.printf("Pot1: %.2f  Pot2: %.3f  Pot3: %.3f\n", pot.x, pot.y, pot.z);
     
     delay(50);
 }

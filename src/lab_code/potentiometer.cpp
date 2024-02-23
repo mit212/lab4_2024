@@ -1,16 +1,22 @@
+#include "potentiometer.h"
 #include <Arduino.h>
-#include "pinout.h"
 
-void setup() {
-    Serial.begin();
-
+void setupPot() {
     // TODO: Declare the potentiometer pins as INPUT. This should only take two lines.
-    // Refer to `test_code/joystick_test.cpp` if needed.
+    // Refer to `lab_code/joystick.cpp` if needed.
+    pinMode(POT1, INPUT); 
+    pinMode(POT2, INPUT);
+    pinMode(POT3, INPUT);
 }
 
-void loop() {
+PotReading readPot() {
     // TODO: Use analogRead to get the potentiometer inputs and update the output struct.
-    // Refer to `test_code/joystick_test.cpp` if needed.
+    // Refer to `lab_code/joystick.cpp` if needed.
+    PotReading output;
+    
+    output.x = analogRead(POT1)/4096.0; 
+    output.y = analogRead(POT2)/4096.0; 
+    output.z = analogRead(POT3)/4096.0; 
 
-    delay(100);
+    return output;
 }

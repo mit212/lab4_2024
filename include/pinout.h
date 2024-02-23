@@ -17,5 +17,8 @@
 #define YPIN 2
 
 // TODO: Add 3 pins, one for each potentiometer 
+#define POT1 6
+#define POT2 7
+#define POT3 8
 
 #endif
