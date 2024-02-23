@@ -7,18 +7,38 @@
 #include "kinematics.h"
 #include "joystick.h"
 
-// TODO 2: Change this bool flag to false to use task space
-bool JOINT_SPACE = true;
+// #define SerialMonitor
+#define MatlabPlot
+
+#define HORIZONTAL_LINE 0
+#define VERTICAL_LINE 1
+#define CIRCLE 2
+#define JOYSTICK_CONTROL 3
+
+// TODO: Change this trajectory_type
+int trajectory_type = HORIZONTAL_LINE;
+
+unsigned long startTime;
+unsigned long elapsedTime;
+unsigned long setupTime = 2500;
+unsigned long currentMillis;
+double t;
 
 //PID Parameters
 double tau = 0.1; //seconds
-PID motorPID1(8.0, 0.0, 0.75, tau, 0.1, false);
-PID motorPID2(3.0, 0.0, 0.5, tau, 0.1, false);
+PID motorPID1(2.0, 250.0, 0.0, 0.0, tau, false);
+PID motorPID2(3.4, 350.0, 0.05, 0.0, tau, false);
 
-JoystickReading joystick_reading;
+JoystickReading joystickReading;
 
+JointSpace state;
 JointSpace setpoint = {THETA1_OFFSET, 0.0};
-JointSpace new_setpoint;
+JointSpace newSetpoint;
+JointSpace endEffectorState;
+
+TaskSpace endEffectorInitial = {0, 25};
+TaskSpace endEffectorTarget;
+TaskSpace endEffectorActual;
 
 double theta1 = 0; //radians
 double theta2 = 0; //radians
@@ -29,8 +49,6 @@ MotorDriver motor1(DIR1, PWM1, 0);
 MotorDriver motor2(DIR2, PWM2, 0);
 EncoderVelocity encoder1(ENCODER1_A_PIN, ENCODER1_B_PIN, CPR_60_RPM, 0.2);
 EncoderVelocity encoder2(ENCODER2_A_PIN, ENCODER2_B_PIN, CPR_60_RPM, 0.2);
-
-double alpha = 0.01;
 
 // Checks if provided JointSpace state is within safety limits
 // Returns true if it is and false otherwise
@@ -45,44 +63,54 @@ void setup() {
 
     Serial.begin(); 
     setupJoystick();
+
+    startTime = millis();
 }
 
 void loop() {
-    // Update setpoint at 1kHz
-    EVERY_N_MICROS(1000) {
-        // TODO 1: Use the function you implemented in joystick.cpp to read inputs from the joystick 
-        // joystick_reading = 
-
-        if (JOINT_SPACE) {
-            // TODO 1: Scale joystick_reading from range [-1, 1) to range [-M_PI/3.0, M_PI/3.0)
-            new_setpoint.theta1 = 0;
-            new_setpoint.theta2 = 0;
-
-            // Translates the setpoint to the defined coordinate system
-            new_setpoint.theta1 += THETA1_OFFSET;
-            new_setpoint.theta2 = -new_setpoint.theta2;
+    // Update setpoint at 2kHz
+    EVERY_N_MICROS(500) {
+        currentMillis = millis();
+        elapsedTime = currentMillis - startTime;
+        // Takes setupTime milliseconds to go to initial position 
+        if (elapsedTime < setupTime) {
+            endEffectorTarget = endEffectorInitial;
         } else {
-            // TODO 2: Set new_setpoint using inverseKinematics() on joystick_reading
-            // Make sure your endEffector coordinates are bounded within a reasonable range
-            // e.g. x in [-0.3, 0.3], y in [0.1, 0.3]
-            TaskSpace endEffector;
-            // endEffector.x = 
-            // endEffector.y = 
-            // new_setpoint = 
+            t = currentMillis/1000.0;
+            if (trajectory_type == HORIZONTAL_LINE) {
+                endEffectorTarget.x = endEffectorInitial.x + 10*sin(M_PI/4.0*t);
+            } else if (trajectory_type == VERTICAL_LINE) {
+                endEffectorTarget.y = endEffectorInitial.y + 10*sin(M_PI/4.0*t);
+            } else if (trajectory_type == CIRCLE) {
+                endEffectorTarget.x = endEffectorInitial.x + 5*cos(t);
+                endEffectorTarget.y = endEffectorInitial.y + 5*sin(t);
+            } else if (trajectory_type == JOYSTICK_CONTROL) {
+                joystickReading = readJoystick(); 
+                // TODO: Convert joystickReading to a reasonable target end effector position
+                // Make sure your endEffectorTarget coordinates are bounded within a reasonable range
+                // e.g. x in [-25, 25], y in [20, 35]
+                endEffectorTarget.x += joystickReading.x * 0.25;
+                endEffectorTarget.y += joystickReading.y * 0.25;
+            } else {
+                ;
+            }
         }
 
-        // If new setpoint is outside safety limits, use old setpoint so robot does nothing
-        if (!safetyLimit(new_setpoint)) {
-            new_setpoint = setpoint;
+        // TODO: Set newSetpoint using inverseKinematics() 
+        newSetpoint = inverseKinematics(endEffectorTarget);
+        
+        // If new setpoint is within safety limits, use new setpoint
+        // Otherwise, keeps old setpoint so robot does nothing
+        if (safetyLimit(newSetpoint)) {
+            setpoint = newSetpoint;
         }
 
-        // Exponential smoothing filter
-        setpoint = new_setpoint*alpha + setpoint*(1 - alpha);
+        endEffectorState = {theta1, theta2};
+        endEffectorActual = forwardKinematics(endEffectorState);
     }
 
     // Update PID at 10kHz
     EVERY_N_MICROS(100) {        
-
         theta1 = encoder1.getPosition() + THETA1_OFFSET;
         theta2 = -encoder2.getPosition();
         controlEffort1 = motorPID1.calculateParallel(theta1, setpoint.theta1);
@@ -92,14 +120,20 @@ void loop() {
         motor2.drive(controlEffort2);
     }
 
-    // Print values at 10Hz
-    EVERY_N_MILLIS(100) {
-
+    // Print values at 50Hz
+    EVERY_N_MILLIS(25) {
+            #ifdef SerialMonitor
             // Print values to serial monitor
-            Serial.printf("T1 SP (rad): %.2f, POS (rad): %.2f, CE: %.2f,   "
-                          "T2 SP (rad): %.2f, POS (rad): %.2f, CE: %.2f\n",
-                          setpoint.theta1, theta1, controlEffort1,
-                          setpoint.theta2, theta2, controlEffort2);
+                Serial.printf("Target X: %.3f, Y: %.3f   "
+                          "Actual X: %.3f, Y: %.3f\n",
+                          endEffectorTarget.x, endEffectorTarget.y,
+                          endEffectorActual.x, endEffectorActual.y);
+            #endif
 
+            #ifdef MatlabPlot
+                Serial.printf("%.2f\t%.2f\t%.2f\t%.2f\n", 
+                        endEffectorTarget.x, endEffectorTarget.y, 
+                        endEffectorActual.x, endEffectorActual.y);
+            #endif
     }
 }
