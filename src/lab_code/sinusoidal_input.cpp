@@ -5,10 +5,9 @@
 #include "pinout.h"
 #include "util.h"
 #include "MotorDriver.h"
-#include "potentiometer.h"
 
-//#define SerialMonitor
-#define MatlabPlot
+// #define SERIAL_MONITOR
+#define MATLAB_PLOT
 
 #define MOTOR1
 //#define MOTOR2
@@ -52,8 +51,6 @@
 
 #endif
 
-PotReading potReading;
-
 void setup() {
     #ifdef MOTOR1
         motor1.setup();
@@ -61,7 +58,6 @@ void setup() {
     #ifdef MOTOR2
         motor2.setup();
     #endif
-    setupPot();
     Serial.begin(); 
 }
 
@@ -94,7 +90,7 @@ void loop() {
     // Print values at 50Hz
     EVERY_N_MILLIS(20) {
             // Print values to serial monitor
-            #ifdef SerialMonitor
+            #ifdef SERIAL_MONITOR
             // Print values to serial monitor
             #ifdef MOTOR1
                 Serial.printf("Setpoint (rad): %.2f, Position (rad): %.2f, Control Effort: %.2f\n",
@@ -106,7 +102,7 @@ void loop() {
             #endif
             #endif
 
-            #ifdef MatlabPlot
+            #ifdef MATLAB_PLOT
                 #ifdef MOTOR1
                     Serial.printf("%.3f\t%.3f\t%.3f\n", millis()/1000.0, setpoint1, position1);
                 #endif

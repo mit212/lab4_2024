@@ -4,28 +4,67 @@
 Spring 2024[^1]
 
 - [Lab 4: PID Tuning and Wireless Comms](#lab-4-pid-tuning-and-wireless-comms)
-  - [1 Validate Hardware Setup](#1-validate-hardware-setup)
-    - [1.1 Validate Microcontroller](#11-validate-microcontroller)
-    - [1.2 Validate Motors](#12-validate-motors)
-    - [1.3 Validate Encoders](#13-validate-encoders)
-    - [1.4 Validate Joystick](#14-validate-joystick)
-  - [2 Potentiometers](#2-potentiometers)
-    - [2.1 Wire Potentiometers](#21-wire-potentiometers)
-    - [2.2 Read Potentiometers](#22-read-potentiometers)
-  - [3 Tune PID Using Potentiometers](#3-tune-pid-using-potentiometers)
-    - [3.1 Constant Setpoint](#31-constant-setpoint)
-    - [3.2 Step Response in Joint Space](#32-step-response-in-joint-space)
-  - [4 Joystick Control](#4-joystick-control)
+  - [0 (Prelab) Software Setup](#0-prelab-software-setup)
+    - [0.1 Python](#01-python)
+    - [0.2 UR5 RTDE](#02-ur5-rtde)
+  - [1 Motor Modelling and Controller Design](#1-motor-modelling-and-controller-design)
+  - [2 Validate Hardware Setup](#2-validate-hardware-setup)
+    - [2.1 Validate Microcontroller](#21-validate-microcontroller)
+    - [2.2 Validate Motors](#22-validate-motors)
+    - [2.3 Validate Encoders](#23-validate-encoders)
+    - [2.4 Validate Joystick](#24-validate-joystick)
+  - [3 Tune Controller](#3-tune-controller)
+  - [4 Drawing Revisited](#4-drawing-revisited)
   - [5 Feedback Form](#5-feedback-form)
-  - [5 Make It Wireless!](#5-make-it-wireless)
-  - [6 are there other sensors we want to expose them to in this lab?](#6-are-there-other-sensors-we-want-to-expose-them-to-in-this-lab)
+  - [X Optional](#x-optional)
 
-## 1 Validate Hardware Setup
+## 0 (Prelab) Software Setup
+
+Estimated time of completion: 15 min
+
+Before coming in to lab, please download and install the following software.
+
+### 0.1 Python 
+
+1. Download Python here: https://www.python.org/downloads/.
+2. Make sure to check "Add python.exe to PATH".
+  
+<p align="center">
+<img src="./.images/Python_install.png" alt="ik" width="400"/>
+</p>
+
+3. Click "Install Now" and finish the installation.
+
+    <details>
+    <summary><i> FAQs </i></summary>
+
+    - **What version of Python do I need?**  
+    We recommend at least 3.8 to ensure compatibility with the packages we will use in this class. If you already have Python, you should be able to check its version by entering the command `python --version` in your terminal. 
+
+    - **How do I check that I installed Python correctly?**  
+    Entering the command `python` in your terminal should return `Python X.X (tags...`. If it instead returns `python is not recognized as an internal or external command, operable program, or batch file` or `python: command not found`, you may have forgotten to add Python to PATH during installation. You can fix this using the following instructions: [How to Add Python to PATH](https://realpython.com/add-python-to-path/).
+
+    - **I already have Miniconda/Anaconda Python. Do I need to get vanilla Python?**  
+    We recommend getting vanilla Python. The staff may not be able to help troubleshoot issues relating to `conda`.
+    </details>
+
+### 0.2 UR5 RTDE
+
+This section to be filled in by Ravi.
+```pip install```
+
+## 1 Motor Modelling and Controller Design
+
+Estimated time of completion: 20 min
+
+Open `matlab/MotorModel.mlx` in MATLAB and follow along the guided tutorial to find the nominal controller gains of the system.
+
+## 2 Validate Hardware Setup
 Estimated time of completion: 10 min
 
 Like in the previous labs, we first want to make sure the parts work individually! Faulty wiring or hardware can be very difficult to debug in complex systems.
 
-### 1.1 Validate Microcontroller
+### 2.1 Validate Microcontroller
 
 **Make sure that motor power is turned off any time you are uploading code to your microcontroller.** The arm has a tendency to spin around and hit itself if motor power is on during upload. As a reminder, motor power should only be on when you expect the motors to move. Otherwise, please keep motor power off. 
 
@@ -43,49 +82,35 @@ https://github.com/mit212/lab1_2024?tab=readme-ov-file#31-git-clone).
 
 </details>
 
-### 1.2 Validate Motors
+### 2.2 Validate Motors
 
 Orient the arm straight up, in default starting position. Run `test_code/motor_drive_test.cpp` to validate your motor setup. You should see both motors oscillating back and forth. Remember, motor 1 is attached to the base and motor 2 is attached to the second link. 
 
-### 1.3 Validate Encoders
+### 2.3 Validate Encoders
 
 Run `test_code/encoder_test.cpp` to validate your encoder setup. Open the Serial Monitor to see the output and confirm that both the direction and the magnitude make sense!
 
-### 1.4 Validate Joystick
+### 2.4 Validate Joystick
 
 Run `lab_code/joystick.cpp` and `test_code/joystick_test.cpp` to validate your joystick setup. **This means you should move both files into the `robot/` directory.** You should be able to see joystick readings within the range `[-1, 1]`.
 
-## 2 Potentiometers
-Estimated time of completion: 25 min
-
-### 2.1 Wire Potentiometers
-
-We will be using potentiometers to quickly and easily tune our PID controller without having to constantly reupload code. First, please wire 3 potentiometers to your microcontroller.
-
-<details>
-    <summary><i> What is a potentiometer?</i>
-    </summary>
-  A potentiometer is an electrical component that functions as a variable resistor or a voltage divider. It consists of a resistive element, such as a carbon track, and a movable wiper contact that slides along the element. By moving the wiper, you can change the resistance between the wiper and each end of the track, which allows you to adjust the level of current flowing through a circuit, or to change the voltage at the wiper, which can be used to control various devices such as the volume on a radio or the position of a servo motor in robotics.
-  </details>
-
-### 2.2 Read Potentiometers
-Complete the `TODO`s in `include/pinout.h`, `include/potentiometer.h` and `lab_code/potentiometer.cpp`. To validate your code, run `lab_code/potentiometer.cpp` and `test_code/potentiometer_test.cpp`.
-
-## 3 Tune PID Using Potentiometers
+## 3 Tune Controller
 Estimated time of completion: 20 min
 
-We will be using the file `lab_code/pid_tune.cpp` to tune our PID controller.
+We will be using `lab_code/sinusoidal_input.cpp` to tune our lead-lag controllers. We will tune the two motors individually.
 
-### 3.1 Constant Setpoint
-First, define the setpoint to be `(M_PI/2, 0)` in joint space by uncommenting `#define Constant` and commenting out `#define SquareWave`. Then, use the potentiometers to change the PID gains. If your PID controller is properly tuned and you disturb the arm in any direction, the arm should quickly return to the setpoint `(M_PI/2, 0)` with minimal overshoot, oscillations, and steady state error. You can validate the response by running `matlab/PIDSerialRead.m`.
+First, uncomment `#define MOTOR2` and comment out `#define MOTOR1`. Update the gains under the `#ifdef MOTOR1` section to use the nominal gains computed from MATLAB. Then, run `lab_code/sinusoidal_input.cpp` and visualize the performance of your controller by running `matlab/StepResponsePlot.m`. 
 
-### 3.2 Step Response in Joint Space
-Once the PID controller is properly tuned to follow a constant setpoint, the next step is to follow a square wave in joint space by commenting out `#define Constant` and uncommenting `#define SquareWave`. Once again, the step response should have minimal overshoot, oscillations, and steady state error.
+Tune your controller by incrementally changing `Ti1`, `Td1`, `Kp1`, and `alpha1` and seeing how that affects the performance. Ideally, we should see minimal overshoot, oscillations, and steady state error. Once you are satisfied with the performance, repeat the process for `MOTOR2`. 
 
-## 4 Joystick Control
+## 4 Drawing Revisited
 Estimated time of completion: 10 min
 
-Open `drawing.cpp` and update gains. Then run it with joystick control, see if that works better than last lab.
+Open `lab_code/drawing.cpp` and update the gains. Run it with `trajectoryType = HORIZONTAL_LINE` and see if the arm performs better than last lab. Feel free to visualize the target and actual trajectories by running `matlab/TrajectoryPlot.m` in MATLAB. Then, run `lab_code/drawing.cpp` again with `trajectoryType = JOYSTICK` and enjoy drawing!.
+
+| :white_check_mark: CHECKOFF X :white_check_mark:   |
+|:---------------------------------------------------|
+| Show your work of art to a TA or LA so we can pin it up on the board! |
 
 ## 5 Feedback Form
 
@@ -95,15 +120,13 @@ Before you leave, please fill out https://tinyurl.com/212-feedback.
 |:---------------------------------------------------|
 | Show the feedback form completion screen to a TA or LA. |
 
+## X Optional
 
-## 5 Make It Wireless!
-
-Rewire so that joystick on a separate system
-Enable wireless comms code
-
-## 6 are there other sensors we want to expose them to in this lab?
-
-
+Here are some optional challenges you can try if you finish lab early!
+1. Run `lab_code/drawing.cpp` with `trajectoryType = VERTICAL_LINE`.
+2. Run `lab_code/drawing.cpp` with `trajectoryType = CIRCLE`.
+3. Connect the joystick to a separate microcontroller and make it wireless.
+4. Try using another type of input besides the joystick. For example, you can use potentiometers or an IMU!
 
 [^1]: Version 1 - 2020: Dr. Harrison Chin  
   Version 2 - 2021: Phillip Daniel  

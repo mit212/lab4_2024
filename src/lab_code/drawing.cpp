@@ -1,10 +1,10 @@
 #include "drawing.h"
 #include "SimpleFilters.h"
 
-#define SERIAL_MONITOR
-// #define MATLAB_PLOT
+// #define SERIAL_MONITOR
+#define MATLAB_PLOT
 
-// set trajectoryType to HORIZONTAL_LINE, VERTICAL_LINE, CIRCLE, SPIRAL, or JOYSTICK
+// TODO: Set trajectoryType to HORIZONTAL_LINE, VERTICAL_LINE, CIRCLE, SPIRAL, or JOYSTICK
 TrajectoryType trajectoryType = JOYSTICK;
 
 // TODO: Put your gains here!
