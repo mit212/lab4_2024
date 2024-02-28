@@ -1,10 +1,11 @@
 #include "drawing.h"
 #include "SimpleFilters.h"
 
-// #define SERIAL_MONITOR
-#define MATLAB_PLOT
+#define SERIAL_MONITOR
+// #define MATLAB_PLOT
 
-TrajectoryType trajectoryType = HORIZONTAL_LINE;
+// set trajectoryType to HORIZONTAL_LINE, VERTICAL_LINE, CIRCLE, SPIRAL, or JOYSTICK
+TrajectoryType trajectoryType = JOYSTICK;
 
 JoystickReading joystickReading;
 
@@ -70,8 +71,8 @@ void loop() {
         pose.theta2 = -encoder2.getPosition();
         
         //calculate the control effort using PID
-        controlEffort1 = Kp1*leadLag1.calculate(setpoint1-position1);
-        controlEffort2 = Kp2*leadLag2.calculate(setpoint2-position2);
+        controlEffort1 = Kp1*leadLag1.calculate(targetPose.theta1-pose.theta1);
+        controlEffort2 = Kp2*leadLag2.calculate(targetPose.theta2-pose.theta2);
 
         //drive the motors
         motor1.drive(controlEffort1);
@@ -84,8 +85,8 @@ void loop() {
             // Print values to serial monitor
                 Serial.printf("Target X: %.3f, Y: %.3f   "
                           "Actual X: %.3f, Y: %.3f\n",
-                          endEffectorTarget.x, endEffectorTarget.y,
-                          endEffectorActual.x, endEffectorActual.y);
+                          targetXY.x, targetXY.y, 
+                          actualXY.x, actualXY.y);
             #endif
 
             #ifdef MATLAB_PLOT

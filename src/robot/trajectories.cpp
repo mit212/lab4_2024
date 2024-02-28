@@ -1,35 +1,35 @@
 #include "trajectories.h"
 
 
-TaskSpace horizontalLine(TaskSpace nominalPosition , double frequency, double amplitude, unsigned long time){
+TaskSpace horizontalLine(TaskSpace nominalPosition, double frequency, double amplitude, unsigned long time){
     nominalPosition.x = nominalPosition.x + amplitude*sin(2*M_PI*frequency*time/1000.0);
     return nominalPosition;
 }
 
-TaskSpace verticalLine(TaskSpace nominalPosition , double frequency, double amplitude, unsigned long time){
+TaskSpace verticalLine(TaskSpace nominalPosition, double frequency, double amplitude, unsigned long time){
     nominalPosition.y = nominalPosition.y + amplitude*sin(2*M_PI*frequency*time/1000.0);
     return nominalPosition;
 }
 
-TaskSpace circle(TaskSpace nominalPosition , double frequency, double radius, unsigned long time){
+TaskSpace circle(TaskSpace nominalPosition, double frequency, double radius, unsigned long time){
     nominalPosition.x = nominalPosition.x + radius*cos(2*M_PI*frequency*time/1000.0);
     nominalPosition.y = nominalPosition.y + radius*sin(2*M_PI*frequency*time/1000.0);
     return nominalPosition;
 }
 
-TaskSpace spiral(TaskSpace nominalPosition , double frequency, double radius, uint revolutions, unsigned long time){
+TaskSpace spiral(TaskSpace nominalPosition, double frequency, double radius, uint revolutions, unsigned long time){
     nominalPosition.x = nominalPosition.x + radius*cos(2*M_PI*frequency*time/1000.0)*sin(2*M_PI*frequency*time/1000.0);
     nominalPosition.y = nominalPosition.y + radius*sin(2*M_PI*frequency*time/1000.0)*sin(2*M_PI*frequency*time/1000.0);
     return nominalPosition;
 }
 
-TaskSpace joystickControl(TaskSpace nominalPosition , JoystickReading joystickReading, unsigned long time){
+TaskSpace joystickControl(TaskSpace nominalPosition, JoystickReading joystickReading, unsigned long time){
     nominalPosition.x = nominalPosition.x + 5*joystickReading.x;
     nominalPosition.y = nominalPosition.y + 5*joystickReading.y;
     return nominalPosition;
 }
 
-TaskSpace updateSetpoint(TaskSpace nominalPosition , TrajectoryType trajectoryType, unsigned long time){
+TaskSpace updateSetpoint(TaskSpace nominalPosition, TrajectoryType trajectoryType, unsigned long time){
     switch (trajectoryType)
     {
     case HORIZONTAL_LINE:
@@ -45,6 +45,7 @@ TaskSpace updateSetpoint(TaskSpace nominalPosition , TrajectoryType trajectoryTy
         return spiral(nominalPosition, 0.5, 5, 5, time);
         break;
     case JOYSTICK:
+        joystickReading = readJoystick();
         return joystickControl(nominalPosition, joystickReading, time);
         break;
     default:
