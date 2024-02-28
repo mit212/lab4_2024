@@ -57,7 +57,7 @@ This section to be filled in by Ravi.
 
 Estimated time of completion: 20 min
 
-Open `matlab/MotorModel.mlx` in MATLAB and follow along the guided tutorial to find the nominal controller gains of the system.
+Clone this repository. Open `matlab/MotorModel.mlx` in MATLAB and follow along the guided tutorial to find the nominal controller gains for the motors.
 
 ## 2 Validate Hardware Setup
 Estimated time of completion: 10 min
@@ -97,18 +97,30 @@ Run `lab_code/joystick.cpp` and `test_code/joystick_test.cpp` to validate your j
 ## 3 Tune Controller
 Estimated time of completion: 20 min
 
-We will be using `lab_code/sinusoidal_input.cpp` to tune our lead-lag controllers. We will tune the two motors individually.
+We will be using `lab_code/sinusoidal_input.cpp` to tune our controllers. We will tune the two motors separately.
 
-First, uncomment `#define MOTOR2` and comment out `#define MOTOR1`. Update the gains under the `#ifdef MOTOR1` section to use the nominal gains computed from MATLAB. Then, run `lab_code/sinusoidal_input.cpp` and visualize the performance of your controller by running `matlab/StepResponsePlot.m`. 
-
-Tune your controller by incrementally changing `Ti1`, `Td1`, `Kp1`, and `alpha1` and seeing how that affects the performance. Ideally, we should see minimal overshoot, oscillations, and steady state error. Once you are satisfied with the performance, repeat the process for `MOTOR2`. 
+1. Uncomment `#define MOTOR2` and comment out `#define MOTOR1`.
+2. Update the parameters under the `#ifdef MOTOR1` section to be the nominal parameters computed from MATLAB. 
+3. Run `lab_code/sinusoidal_input.cpp`.
+4. Open `matlab/TuningPlot.m` in MATLAB. Update the COM port.
+5. Run `matlab/TuningPlot.m` in MATLAB to visualize the performance of your controller. 
+6. Tune your controller by incrementally changing `Ti1`, `Td1`, `Kp1`, and `alpha1` and seeing how that affects performance. Ideally, we want minimal overshoot, oscillations, and steady state error. 
+7. Once you are satisfied with the performance, repeat the process for `MOTOR2`. 
 
 ## 4 Drawing Revisited
 Estimated time of completion: 10 min
 
-Open `lab_code/drawing.cpp` and update the gains. Run it with `trajectoryType = HORIZONTAL_LINE` and see if the arm performs better than last lab. Feel free to visualize the target and actual trajectories by running `matlab/TrajectoryPlot.m` in MATLAB. Then, run `lab_code/drawing.cpp` again with `trajectoryType = JOYSTICK` and enjoy drawing!.
+We will now use your tuned controllers to improve the drawing from last lab!
 
-| :white_check_mark: CHECKOFF X :white_check_mark:   |
+1. Open `lab_code/drawing.cpp` and update the parameters.
+2. Set `trajectoryType = HORIZONTAL_LINE`.
+3. Run `lab_code/drawing.cpp` and observe whether the arm performs better than last lab.
+4. Open `matlab/TrajectoryPlot.m` in MATLAB. Update the COM port.
+5. Run `matlab/TrajectoryPlot.m` to visualize the target and actual trajectories.
+6. Set `trajectoryType = JOYSTICK` and run `lab_code/drawing.cpp` again.
+7. Draw something awesome using your joystick!
+
+| :white_check_mark: CHECKOFF 1 :white_check_mark:   |
 |:---------------------------------------------------|
 | Show your work of art to a TA or LA so we can pin it up on the board! |
 
@@ -116,7 +128,7 @@ Open `lab_code/drawing.cpp` and update the gains. Run it with `trajectoryType = 
 
 Before you leave, please fill out https://tinyurl.com/212-feedback. 
 
-| :white_check_mark: CHECKOFF X :white_check_mark:   |
+| :white_check_mark: CHECKOFF 2 :white_check_mark:   |
 |:---------------------------------------------------|
 | Show the feedback form completion screen to a TA or LA. |
 
