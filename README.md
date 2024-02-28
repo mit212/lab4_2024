@@ -16,9 +16,9 @@ Spring 2024[^1]
     - [3.1 Constant Setpoint](#31-constant-setpoint)
     - [3.2 Step Response in Joint Space](#32-step-response-in-joint-space)
   - [4 Joystick Control](#4-joystick-control)
+  - [5 Feedback Form](#5-feedback-form)
   - [5 Make It Wireless!](#5-make-it-wireless)
   - [6 are there other sensors we want to expose them to in this lab?](#6-are-there-other-sensors-we-want-to-expose-them-to-in-this-lab)
-  - [7 Feedback Form](#7-feedback-form)
 
 ## 1 Validate Hardware Setup
 Estimated time of completion: 10 min
@@ -87,14 +87,7 @@ Estimated time of completion: 10 min
 
 Open `drawing.cpp` and update gains. Then run it with joystick control, see if that works better than last lab.
 
-## 5 Make It Wireless!
-
-Rewire so that joystick on a separate system
-Enable wireless comms code
-
-## 6 are there other sensors we want to expose them to in this lab?
-
-## 7 Feedback Form
+## 5 Feedback Form
 
 Before you leave, please fill out https://tinyurl.com/212-feedback. 
 
@@ -103,7 +96,16 @@ Before you leave, please fill out https://tinyurl.com/212-feedback.
 | Show the feedback form completion screen to a TA or LA. |
 
 
+## 5 Make It Wireless!
+
+Rewire so that joystick on a separate system
+Enable wireless comms code
+
+## 6 are there other sensors we want to expose them to in this lab?
+
+
+
 [^1]: Version 1 - 2020: Dr. Harrison Chin  
   Version 2 - 2021: Phillip Daniel  
   Version 3 - 2023: Ravi Tejwani and Kentaro Barhydt  
-  Version 4 - 2024: Jinger Chong, Josh Sohn
+  Version 4 - 2024: Joseph Ntaimo, Jinger Chong, Josh Sohn

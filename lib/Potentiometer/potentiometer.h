@@ -1,5 +1,5 @@
-#ifndef POT
-#define POT
+#ifndef POT_H
+#define POT_H
 
 #include "pinout.h"
 

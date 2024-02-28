@@ -28,6 +28,6 @@ void loop(){
     // Print every PRINT_DELAY milliseconds
     EVERY_N_MILLIS(PRINT_DELAY) {
         point = forwardKinematics(state);
-        Serial.printf("x: %.2f, y: %.2f\n", point.x, point.y);
+        Serial.printf("%.2f\t%.2f\n", point.x, point.y);
     }
 }
