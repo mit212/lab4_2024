@@ -20,7 +20,7 @@
     #define Kp1 9.36
     #define alpha1 10
     MotorDriver motor1(DIR1, PWM1, 0);  
-    EncoderVelocity encoder(ENCODER1_A_PIN, ENCODER1_B_PIN, CPR_60_RPM, 0.2);
+    EncoderVelocity encoder1(ENCODER1_A_PIN, ENCODER1_B_PIN, CPR_60_RPM, 0.2);
     LeadLagFilter leadLag1(alpha1, Td1, Ti1);
     double setpoint1 = 0;
     double position1 = 0;
@@ -39,7 +39,7 @@
     #define Kp2 10
     #define alpha2 1
     MotorDriver motor2(DIR2, PWM2, 1);  
-    EncoderVelocity encoder(ENCODER2_A_PIN, ENCODER2_B_PIN, CPR_60_RPM, 0.2);
+    EncoderVelocity encoder2(ENCODER2_A_PIN, ENCODER2_B_PIN, CPR_60_RPM, 0.2);
     LeadLagFilter leadLag2(alpha2, Td2, Ti2);
     double setpoint2 = 0;
     double position2 = 0;
@@ -79,25 +79,30 @@ void loop() {
     //update PID at 5khz
     EVERY_N_MICROS(200) {
         #ifdef MOTOR1
-            position1 = encoder.getPosition();
+            position1 = encoder1.getPosition();
             controlEffort1 = Kp1*leadLag1.calculate(setpoint1-position1);
             motor1.drive(controlEffort1);
         #endif
         #ifdef MOTOR2
-            position2 = -encoder.getPosition();
+            position2 = -encoder2.getPosition();
             controlEffort2 = Kp2*leadLag2.calculate(setpoint2-position2);
             motor2.drive(controlEffort2);
         #endif
     }
 
     // Update gains at 2Hz
-    EVERY_N_MICROS(500) {
-        potReading = readPot();
-        double alpha = potReading.x * 10;
-        double Td = potReading.y * 500;
-        double Ti = potReading.z * 10;
-        leadLag2.setParameters(alpha, Td, Ti);
-    }
+    // EVERY_N_MICROS(500) {
+    //     potReading = readPot();
+    //     double alpha = potReading.x * 10;
+    //     double Td = potReading.y * 500;
+    //     double Ti = potReading.z * 10;
+    //     #ifdef MOTOR1
+    //         leadLag1.setParameters(alpha, Td, Ti);
+    //     #endif
+    //     #ifdef MOTOR2
+    //         leadLag2.setParameters(alpha, Td, Ti);
+    //     #endif
+    // }
 
 
     // Print values at 50Hz
