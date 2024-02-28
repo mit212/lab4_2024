@@ -10,8 +10,8 @@
 //#define SerialMonitor
 #define MatlabPlot
 
-//#define MOTOR1
-#define MOTOR2
+#define MOTOR1
+//#define MOTOR2
 
 #ifdef MOTOR1
     // TODO: Put your gains here!
@@ -89,20 +89,6 @@ void loop() {
             motor2.drive(controlEffort2);
         #endif
     }
-
-    // Update gains at 2Hz
-    // EVERY_N_MICROS(500) {
-    //     potReading = readPot();
-    //     double alpha = potReading.x * 10;
-    //     double Td = potReading.y * 500;
-    //     double Ti = potReading.z * 10;
-    //     #ifdef MOTOR1
-    //         leadLag1.setParameters(alpha, Td, Ti);
-    //     #endif
-    //     #ifdef MOTOR2
-    //         leadLag2.setParameters(alpha, Td, Ti);
-    //     #endif
-    // }
 
 
     // Print values at 50Hz
