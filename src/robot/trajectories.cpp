@@ -1,5 +1,7 @@
 #include "trajectories.h"
 
+JoystickReading joystickReading;
+double delta_max = 0.1;
 
 TaskSpace horizontalLine(TaskSpace nominalPosition, double frequency, double amplitude, unsigned long time){
     nominalPosition.x = nominalPosition.x + amplitude*sin(2*M_PI*frequency*time/1000.0);
@@ -23,13 +25,26 @@ TaskSpace spiral(TaskSpace nominalPosition, double frequency, double radius, uin
     return nominalPosition;
 }
 
-TaskSpace joystickControl(TaskSpace nominalPosition, JoystickReading joystickReading, unsigned long time){
-    nominalPosition.x = nominalPosition.x + 5*joystickReading.x;
-    nominalPosition.y = nominalPosition.y + 5*joystickReading.y;
-    return nominalPosition;
+TaskSpace joystickControl(TaskSpace targetPosition, JoystickReading joystickReading, unsigned long time){
+    // ignore steady state error from joystick reading
+    if (joystickReading.x > -0.1 && joystickReading.x < 0.1) {
+        joystickReading.x = 0.0;
+    }
+    if (joystickReading.y > -0.1 && joystickReading.y < 0.1) {
+        joystickReading.y = 0.0;
+    }
+
+    // incremental position control
+    TaskSpace newPosition;
+    newPosition.x = targetPosition.x + 0.1*joystickReading.x;
+    newPosition.y = targetPosition.y + 0.1*joystickReading.y;
+
+    // constrain position to workspace
+    newPosition = getClosestPointInWorkspace(newPosition);
+    return newPosition;
 }
 
-TaskSpace updateSetpoint(TaskSpace nominalPosition, TrajectoryType trajectoryType, unsigned long time){
+TaskSpace updateSetpoint(TaskSpace nominalPosition, TaskSpace targetPosition, TrajectoryType trajectoryType, unsigned long time){
     switch (trajectoryType)
     {
     case HORIZONTAL_LINE:
@@ -46,10 +61,28 @@ TaskSpace updateSetpoint(TaskSpace nominalPosition, TrajectoryType trajectoryTyp
         break;
     case JOYSTICK:
         joystickReading = readJoystick();
-        return joystickControl(nominalPosition, joystickReading, time);
+        return joystickControl(targetPosition, joystickReading, time);
         break;
     default:
         return nominalPosition;
         break;
+    }
+}
+
+TaskSpace getClosestPointInWorkspace(TaskSpace position) {
+    double min_reach = max(0.0, abs(L1 - L2));
+    double max_reach = L1 + L2 - delta_max;
+    double distance = sqrt(position.x * position.x + position.y * position.y);
+
+    if (distance >= min_reach && distance <= max_reach) {
+        // The point is already inside the workspace
+        return position;
+    } else {
+        // Adjust the point to the nearest point on the boundary of the workspace
+        TaskSpace closestPoint;
+        double scale = distance < min_reach ? min_reach / distance : max_reach / distance;
+        closestPoint.x = position.x * scale;
+        closestPoint.y = position.y * scale;
+        return closestPoint;
     }
 }

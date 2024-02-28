@@ -14,6 +14,3 @@ JoystickReading readJoystick() {
 
     return output;
 };
-
-
-

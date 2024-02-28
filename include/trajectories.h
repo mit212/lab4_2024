@@ -14,12 +14,13 @@ enum TrajectoryType {
     RECTANGLE
 };
 
-TaskSpace horizontalLine(TaskSpace nominalPosition , double frequency, double amplitude, unsigned long time);
-TaskSpace verticalLine(TaskSpace nominalPosition , double frequency, double amplitude, unsigned long time);
-TaskSpace circle(TaskSpace nominalPosition , double frequency, double radius, unsigned long time);
-TaskSpace spiral(TaskSpace nominalPosition , double frequency, double radius, uint revolutions, unsigned long time);
-TaskSpace joystickControl(TaskSpace nominalPosition , JoystickReading joystickReading, unsigned long time);
-TaskSpace updateSetpoint(TaskSpace nominalPosition , TrajectoryType trajectoryType, unsigned long time);
+TaskSpace horizontalLine(TaskSpace nominalPosition, double frequency, double amplitude, unsigned long time);
+TaskSpace verticalLine(TaskSpace nominalPosition, double frequency, double amplitude, unsigned long time);
+TaskSpace circle(TaskSpace nominalPosition, double frequency, double radius, unsigned long time);
+TaskSpace spiral(TaskSpace nominalPosition, double frequency, double radius, uint revolutions, unsigned long time);
+TaskSpace joystickControl(TaskSpace actualPosition, JoystickReading joystickReading, unsigned long time);
+TaskSpace updateSetpoint(TaskSpace nominalPosition, TaskSpace actualPosition, TrajectoryType trajectoryType, unsigned long time);
+TaskSpace getClosestPointInWorkspace(TaskSpace position);
 
 extern JoystickReading joystickReading;
 #endif
