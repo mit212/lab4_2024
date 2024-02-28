@@ -5,7 +5,7 @@
 #define MATLAB_PLOT
 
 // TODO: Set trajectoryType to HORIZONTAL_LINE, VERTICAL_LINE, CIRCLE, SPIRAL, or JOYSTICK
-TrajectoryType trajectoryType = JOYSTICK;
+TrajectoryType trajectoryType = HORIZONTAL_LINE;
 
 // TODO: Put your gains here!
 #define Ti1 0.0183
@@ -53,7 +53,7 @@ void loop() {
     // Update setpoint and kinematics at 200hz
     EVERY_N_MILLIS(5) {
         //get new cartesian setpoint based on trajectory type
-        targetXY = updateSetpoint(nominalXY, targetXY, trajectoryType, millis());
+        targetXY = updateSetpoint(initialXY, nominalXY, targetXY, trajectoryType, millis());
         //update current XY based on current pose
         actualXY = forwardKinematics(pose);
         //Get new joint setpoint based on cartesian setpoint

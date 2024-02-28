@@ -2,6 +2,14 @@
 
 JoystickReading joystickReading;
 double delta_max = 0.1;
+unsigned long setupTime = 3000;
+
+TaskSpace setupLine(TaskSpace initialPosition, TaskSpace nominalPosition, unsigned long time){
+    double fraction = static_cast<double>(time) / static_cast<double>(setupTime);
+    nominalPosition.x = initialPosition.x + (nominalPosition.x - initialPosition.x) * fraction;
+    nominalPosition.y = initialPosition.y + (nominalPosition.y - initialPosition.y) * fraction;
+    return nominalPosition;
+}
 
 TaskSpace horizontalLine(TaskSpace nominalPosition, double frequency, double amplitude, unsigned long time){
     nominalPosition.x = nominalPosition.x + amplitude*sin(2*M_PI*frequency*time/1000.0);
@@ -44,28 +52,32 @@ TaskSpace joystickControl(TaskSpace targetPosition, JoystickReading joystickRead
     return newPosition;
 }
 
-TaskSpace updateSetpoint(TaskSpace nominalPosition, TaskSpace targetPosition, TrajectoryType trajectoryType, unsigned long time){
-    switch (trajectoryType)
-    {
-    case HORIZONTAL_LINE:
-        return horizontalLine(nominalPosition, 0.5, 20, time);
-        break;
-    case VERTICAL_LINE:
-        return verticalLine(nominalPosition, 0.5, 10, time);
-        break;
-    case CIRCLE:
-        return circle(nominalPosition, 0.5, 5, time);
-        break;
-    case SPIRAL:
-        return spiral(nominalPosition, 0.5, 5, 5, time);
-        break;
-    case JOYSTICK:
-        joystickReading = readJoystick();
-        return joystickControl(targetPosition, joystickReading, time);
-        break;
-    default:
-        return nominalPosition;
-        break;
+TaskSpace updateSetpoint(TaskSpace initialPosition, TaskSpace nominalPosition, TaskSpace targetPosition, TrajectoryType trajectoryType, unsigned long time){
+    if (time < setupTime) {
+        return setupLine(initialPosition, nominalPosition, time);
+    } else {
+        switch (trajectoryType)
+        {
+        case HORIZONTAL_LINE:
+            return horizontalLine(nominalPosition, 0.5, 20, time);
+            break;
+        case VERTICAL_LINE:
+            return verticalLine(nominalPosition, 0.5, 10, time);
+            break;
+        case CIRCLE:
+            return circle(nominalPosition, 0.5, 5, time);
+            break;
+        case SPIRAL:
+            return spiral(nominalPosition, 0.5, 5, 5, time);
+            break;
+        case JOYSTICK:
+            joystickReading = readJoystick();
+            return joystickControl(targetPosition, joystickReading, time);
+            break;
+        default:
+            return nominalPosition;
+            break;
+        }
     }
 }
 
