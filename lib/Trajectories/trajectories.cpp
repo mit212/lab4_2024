@@ -65,10 +65,10 @@ TaskSpace updateSetpoint(TaskSpace initialPosition, TaskSpace nominalPosition, T
             return verticalLine(nominalPosition, 0.5, 10, time);
             break;
         case CIRCLE:
-            return circle(nominalPosition, 0.5, 5, time);
+            return circle(nominalPosition, 0.5, 2, time);
             break;
         case SPIRAL:
-            return spiral(nominalPosition, 0.5, 5, 5, time);
+            return spiral(nominalPosition, 0.5, 2, 5, time);
             break;
         case JOYSTICK:
             joystickReading = readJoystick();
