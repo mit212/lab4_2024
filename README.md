@@ -64,7 +64,7 @@ For Windows:
     <details>
     <summary><i> Not working? </i></summary>
 
-    Please refer to this tutorial: [How to install Linux on Windows with WSL](https://learn.microsoft.com/en-us/windows/wsl/install.)
+    Please refer to this tutorial: [How to install Linux on Windows with WSL](https://learn.microsoft.com/en-us/windows/wsl/install.).
     </details>
 
 3. Restart your machine.
@@ -76,7 +76,7 @@ For Windows:
     sudo apt install python3-pip
     pip3 install ur_rtde
     ```
-    Tip: You can paste it text from your clipboard by right-clicking in Powershell.
+    Tip: You can paste text from your clipboard by right-clicking in Powershell.
 
 For Linux: 
 1. Open Terminal.
