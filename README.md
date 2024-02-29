@@ -49,17 +49,29 @@ We recommend getting vanilla Python. The staff may not be able to help troublesh
 </details>
 
 ### 0.2 UR5 RTDE
+For Linux/Mac: 
+1. Open Terminal.
+2. Enter `pip3 install ur_rtde`.
 
-Install `ur_rtde`:
-- Linux/Mac: 
-  - Open terminal and type `pip3 install ur_rtde`
-- Windows: 
-  - Install wsl 
-  - Open terminal and type `pip3 install ur_rtde` 
+For Windows: 
+1. Open PowerShell in administrator mode by right-clicking and selecting "Run as administrator".
+2. Enter `wsl --install`. This installs Windows Subsystem for Linux (WSL) with Ubuntu as the default distribution.
+   
+    <details>
+    <summary><i> Not working? </i></summary>
+
+    Please refer to this tutorial: https://learn.microsoft.com/en-us/windows/wsl/install.
+    </details>
+
+3. Restart your machine.
+4. Open Powershell and enter `wsl` to open a WSL terminal window.
+5. Enter `sudo apt update`.
+6. Enter `sudo apt install python3-pip`. When asked if you want to continue the install, enter `Y`.
+7. Enter `pip3 install ur_rtde`.
 
 Additional references:
-- Github (Example Codes): https://github.com/mit212/ur_2024
-- RTDE API Doc: https://sdurobotics.gitlab.io/ur_rtde/
+- [Github (Example Codes)](https://github.com/mit212/ur_2024)
+- [RTDE API Doc](https://sdurobotics.gitlab.io/ur_rtde/)
 
 ## 1 Motor Modelling and Controller Design
 
