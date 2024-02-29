@@ -84,14 +84,22 @@ For Linux:
 
 For MacOS:
 1. Open Terminal.
-2. Enter `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` to install Homebrew, a package manager similar to Linux `apt`.
+2. Enter `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` to install [Homebrew](https://brew.sh/), a package manager similar to Linux `apt`.
 3. Enter the following sequentially:
     ```
     brew update
     brew upgrade
     brew install boost
     brew install cmake
-    pip3 install ur_rtde
+    
+    git clone https://gitlab.com/sdurobotics/ur_rtde.git
+    cd ur_rtde
+    git submodule update --init --recursive
+    mkdir build
+    cd build
+    cmake ..
+    make
+    sudo make install
     ```
 
     <details>
