@@ -69,24 +69,29 @@ For Windows:
 
 3. Restart your machine.
 4. Open Powershell and enter `wsl` to open a WSL terminal window. You might be asked to create a username and password. This can be whatever you want as long as you remember it.
-5. Enter `sudo apt update`.
-6. Enter `sudo apt upgrade`. When asked if you want to continue the install, enter `Y`.
-7. Enter `sudo apt install python3-pip`. When asked if you want to continue the install, enter `Y`.
-8. Enter `pip3 install ur_rtde`.
+5. Enter the following sequentially:
+    ```
+    sudo apt update
+    sudo apt upgrade
+    sudo apt install python3-pip
+    pip3 install ur_rtde
+    ```
 
 For Linux: 
 1. Open Terminal.
-2. Follow steps 5 to 8 under "For Windows".
+2. Follow step 5 under "For Windows".
 
 For MacOS:
 1. Open Terminal.
 2. Enter `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` to install Homebrew, a package manager similar to Linux `apt`.
-3. Enter `brew update`.
-4. Enter `brew upgrade`.
-5. Enter `brew install cmake`.
-6. Enter `brew install boost`.
-7. Enter `pip3 install cmake`.
-8. Enter `pip3 install ur_rtde`.
+3. Enter the following sequentially:
+    ```
+    brew update
+    brew upgrade
+    brew install boost
+    brew install cmake
+    pip3 install ur_rtde
+    ```
 
     <details>
     <summary><i> Not working? </i></summary>
