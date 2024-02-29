@@ -85,7 +85,8 @@ For Linux:
 For MacOS:
 1. Open Terminal.
 2. Enter `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` to install [Homebrew](https://brew.sh/), a package manager similar to Linux `apt`.
-3. Enter the following sequentially:
+3. Enter `echo "export PATH=/opt/homebrew/bin:$PATH" >> ~/.bash_profile && source ~/.bash_profile` to add Homebrew to PATH.
+4. Enter the following sequentially:
     ```
     brew update
     brew upgrade
