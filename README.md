@@ -50,8 +50,16 @@ Before coming in to lab, please download and install the following software.
 
 ### 0.2 UR5 RTDE
 
-This section to be filled in by Ravi.
-```pip install```
+Install `ur_rtde`:
+- Linux/Mac: 
+  - Open terminal and type `pip3 install ur_rtde`
+- Windows: 
+  - Install wsl 
+  - Open terminal and type `pip3 install ur_rtde` 
+
+Additional references:
+- Github (Example Codes): https://github.com/mit212/ur_2024
+- RTDE API Doc: https://sdurobotics.gitlab.io/ur_rtde/
 
 ## 1 Motor Modelling and Controller Design
 
