@@ -8,10 +8,10 @@
 TrajectoryType trajectoryType = HORIZONTAL_LINE;
 
 // TODO: Put your gains here!
-#define Ti1 0.0183
-#define Td1 0.0021
-#define Kp1 9.36
-#define alpha1 10
+#define Ti1 0
+#define Td1 0
+#define Kp1 0
+#define alpha1 0
 MotorDriver motor1(DIR1, PWM1, 0);  
 EncoderVelocity encoder1(ENCODER1_A_PIN, ENCODER1_B_PIN, CPR_60_RPM, 0.2);
 LeadLagFilter leadLag1(10, 0.0021, 0.0183);
@@ -20,10 +20,10 @@ double position1 = 0;
 double controlEffort1 = 0;
 
 // TODO: Put your gains here!
-#define Ti2 0.0275
-#define Td2 0.0032
-#define Kp2 10
-#define alpha2 1
+#define Ti2 0
+#define Td2 0
+#define Kp2 0
+#define alpha2 0
 MotorDriver motor2(DIR2, PWM2, 1);  
 EncoderVelocity encoder2(ENCODER2_A_PIN, ENCODER2_B_PIN, CPR_60_RPM, 0.2);
 LeadLagFilter leadLag2(alpha2, Td2, Ti2);

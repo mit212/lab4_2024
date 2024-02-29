@@ -12,6 +12,13 @@ void LeadLagFilter::setParameters(double alpha, double Td, double Ti) {
 }
 
 double LeadLagFilter::calculate(double input) {
+    if (_alpha == 0) {
+        return _lagFilter.calculate(input);
+    }
+    if (_alpha == 0) {
+        return _lagFilter.calculate(input);
+    }
+
     double lagOutput = _lagFilter.calculate(input);
     return _leadFilter.calculate(lagOutput);
 }
