@@ -1,21 +1,22 @@
-# Lab 4: PID Tuning and Wireless Comms
+# Lab 4: UR5 and Motor Control
 
 2.12/2.120 Intro to Robotics  
 Spring 2024[^1]
 
-- [0 (Prelab) Software Setup](#0-prelab-software-setup)
-  - [0.1 Python](#01-python)
-  - [0.2 UR5 RTDE](#02-ur5-rtde)
-- [1 Motor Modelling and Controller Design](#1-motor-modelling-and-controller-design)
-- [2 Validate Hardware Setup](#2-validate-hardware-setup)
-  - [2.1 Validate Microcontroller](#21-validate-microcontroller)
-  - [2.2 Validate Motors](#22-validate-motors)
-  - [2.3 Validate Encoders](#23-validate-encoders)
-  - [2.4 Validate Joystick](#24-validate-joystick)
-- [3 Tune Controller](#3-tune-controller)
-- [4 Drawing Revisited](#4-drawing-revisited)
-- [5 Feedback Form](#5-feedback-form)
-- [X Optional](#x-optional)
+- [Lab 4: UR5 and Motor Control](#lab-4-ur5-and-motor-control)
+  - [0 (Prelab) Software Setup](#0-prelab-software-setup)
+    - [0.1 Python](#01-python)
+    - [0.2 UR5 RTDE](#02-ur5-rtde)
+  - [1 Motor Modelling and Controller Design](#1-motor-modelling-and-controller-design)
+  - [2 Validate Hardware Setup](#2-validate-hardware-setup)
+    - [2.1 Validate Microcontroller](#21-validate-microcontroller)
+    - [2.2 Validate Motors](#22-validate-motors)
+    - [2.3 Validate Encoders](#23-validate-encoders)
+    - [2.4 Validate Joystick](#24-validate-joystick)
+  - [3 Tune Controller](#3-tune-controller)
+  - [4 Drawing Revisited](#4-drawing-revisited)
+  - [5 Feedback Form](#5-feedback-form)
+  - [X Optional](#x-optional)
 
 ## 0 (Prelab) Software Setup
 
