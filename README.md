@@ -3,20 +3,19 @@
 2.12/2.120 Intro to Robotics  
 Spring 2024[^1]
 
-- [Lab 4: PID Tuning and Wireless Comms](#lab-4-pid-tuning-and-wireless-comms)
-  - [0 (Prelab) Software Setup](#0-prelab-software-setup)
-    - [0.1 Python](#01-python)
-    - [0.2 UR5 RTDE](#02-ur5-rtde)
-  - [1 Motor Modelling and Controller Design](#1-motor-modelling-and-controller-design)
-  - [2 Validate Hardware Setup](#2-validate-hardware-setup)
-    - [2.1 Validate Microcontroller](#21-validate-microcontroller)
-    - [2.2 Validate Motors](#22-validate-motors)
-    - [2.3 Validate Encoders](#23-validate-encoders)
-    - [2.4 Validate Joystick](#24-validate-joystick)
-  - [3 Tune Controller](#3-tune-controller)
-  - [4 Drawing Revisited](#4-drawing-revisited)
-  - [5 Feedback Form](#5-feedback-form)
-  - [X Optional](#x-optional)
+- [0 (Prelab) Software Setup](#0-prelab-software-setup)
+  - [0.1 Python](#01-python)
+  - [0.2 UR5 RTDE](#02-ur5-rtde)
+- [1 Motor Modelling and Controller Design](#1-motor-modelling-and-controller-design)
+- [2 Validate Hardware Setup](#2-validate-hardware-setup)
+  - [2.1 Validate Microcontroller](#21-validate-microcontroller)
+  - [2.2 Validate Motors](#22-validate-motors)
+  - [2.3 Validate Encoders](#23-validate-encoders)
+  - [2.4 Validate Joystick](#24-validate-joystick)
+- [3 Tune Controller](#3-tune-controller)
+- [4 Drawing Revisited](#4-drawing-revisited)
+- [5 Feedback Form](#5-feedback-form)
+- [X Optional](#x-optional)
 
 ## 0 (Prelab) Software Setup
 
@@ -100,7 +99,7 @@ Run `test_code/encoder_test.cpp` to validate your encoder setup. Open the Serial
 
 ### 2.4 Validate Joystick
 
-Run `lab_code/joystick.cpp` and `test_code/joystick_test.cpp` to validate your joystick setup. **This means you should move both files into the `robot/` directory.** You should be able to see joystick readings within the range `[-1, 1]`.
+Run `test_code/joystick_test.cpp` to validate your joystick setup. You should be able to see joystick readings within the range `[-1, 1]`.
 
 ## 3 Tune Controller
 Estimated time of completion: 20 min
