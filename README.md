@@ -76,6 +76,7 @@ For Windows:
     sudo apt install python3-pip
     pip3 install ur_rtde
     ```
+    Tip: You can paste it text from your clipboard by right-clicking in Powershell.
 
 For Linux: 
 1. Open Terminal.
