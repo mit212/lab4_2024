@@ -27,26 +27,34 @@ Before coming in to lab, please download and install the following software.
 ### 0.1 Python 
 
 1. Download Python here: https://www.python.org/downloads/.
+    <details>
+    <summary><i> What version of Python do I need? </i></summary>
+
+    We recommend at least 3.8 to ensure compatibility with the packages we will use in this class. If you already have Python, you should be able to check its version by entering the command `python --version` in your terminal. 
+
+    </details>
+
+    <details>
+    <summary><i> Can I get Python via conda? </i></summary>
+
+    We recommend getting vanilla Python. The staff may not be able to help troubleshoot issues relating to `conda`.
+
+    </details>
+
 2. Make sure to check "Add python.exe to PATH".
   
-<p align="center">
-<img src="./.images/Python_install.png" alt="ik" width="400"/>
-</p>
+    <p align="center">
+    <img src="./.images/Python_install.png" alt="ik" width="400"/>
+    </p>
 
 3. Click "Install Now" and finish the installation.
+4. Check that you installed Python correctly by entering the command `python` in your terminal. It should return `Python X.X (tags...`. 
+    <details>
+    <summary><i> It's returning something else? </i></summary>
 
-<details>
-<summary><i> FAQs </i></summary>
+    If it instead returns `python is not recognized as an internal or external command, operable program, or batch file` or `python: command not found`, you may have forgotten to add Python to PATH during installation. You can fix this using the following instructions: [How to Add Python to PATH](https://realpython.com/add-python-to-path/).
 
-- **What version of Python do I need?**  
-We recommend at least 3.8 to ensure compatibility with the packages we will use in this class. If you already have Python, you should be able to check its version by entering the command `python --version` in your terminal. 
-
-- **How do I check that I installed Python correctly?**  
-Entering the command `python` in your terminal should return `Python X.X (tags...`. If it instead returns `python is not recognized as an internal or external command, operable program, or batch file` or `python: command not found`, you may have forgotten to add Python to PATH during installation. You can fix this using the following instructions: [How to Add Python to PATH](https://realpython.com/add-python-to-path/).
-
-- **I already have Miniconda/Anaconda Python. Do I need to get vanilla Python?**  
-We recommend getting vanilla Python. The staff may not be able to help troubleshoot issues relating to `conda`.
-</details>
+    </details>  
 
 ### 0.2 UR5 RTDE
 For Linux/Mac: 
@@ -60,11 +68,11 @@ For Windows:
     <details>
     <summary><i> Not working? </i></summary>
 
-    Please refer to this tutorial: https://learn.microsoft.com/en-us/windows/wsl/install.
+    Please refer to this tutorial: [How to install Linux on Windows with WSL](https://learn.microsoft.com/en-us/windows/wsl/install.)
     </details>
 
 3. Restart your machine.
-4. Open Powershell and enter `wsl` to open a WSL terminal window.
+4. Open Powershell and enter `wsl` to open a WSL terminal window. You might be asked to create a username and password. This can be whatever you want as long as you remember it.
 5. Enter `sudo apt update`.
 6. Enter `sudo apt install python3-pip`. When asked if you want to continue the install, enter `Y`.
 7. Enter `pip3 install ur_rtde`.
