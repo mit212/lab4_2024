@@ -57,10 +57,6 @@ Before coming in to lab, please download and install the following software.
     </details>  
 
 ### 0.2 UR5 RTDE
-For Linux/Mac: 
-1. Open Terminal.
-2. Enter `pip3 install ur_rtde`.
-
 For Windows: 
 1. Open PowerShell in administrator mode by right-clicking and selecting "Run as administrator".
 2. Enter `wsl --install`. This installs Windows Subsystem for Linux (WSL) with Ubuntu as the default distribution.
@@ -74,9 +70,31 @@ For Windows:
 3. Restart your machine.
 4. Open Powershell and enter `wsl` to open a WSL terminal window. You might be asked to create a username and password. This can be whatever you want as long as you remember it.
 5. Enter `sudo apt update`.
-6. Enter `sudo apt install python3-pip`. When asked if you want to continue the install, enter `Y`.
-7. Enter `pip3 install ur_rtde`.
+6. Enter `sudo apt upgrade`. When asked if you want to continue the install, enter `Y`.
+7. Enter `sudo apt install python3-pip`. When asked if you want to continue the install, enter `Y`.
+8. Enter `pip3 install ur_rtde`.
 
+For Linux: 
+1. Open Terminal.
+2. Follow steps 5 to 8 under "For Windows".
+
+For MacOS:
+1. Open Terminal.
+2. Enter `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` to install Homebrew, a package manager similar to Linux `apt`.
+3. Enter `brew update`.
+4. Enter `brew upgrade`.
+5. Enter `brew install cmake`.
+6. Enter `brew install boost`.
+7. Enter `pip3 install cmake`.
+8. Enter `pip3 install ur_rtde`.
+
+    <details>
+    <summary><i> Not working? </i></summary>
+
+    We are still debugging why this doesn't work especially for Apple chip Macs. Feel free to send the staff an email with the error you are getting.
+    </details>
+    
+   
 Additional references:
 - [Github (Example Codes)](https://github.com/mit212/ur_2024)
 - [RTDE API Doc](https://sdurobotics.gitlab.io/ur_rtde/)
@@ -127,7 +145,7 @@ Estimated time of completion: 20 min
 
 We will be using `lab_code/sinusoidal_input.cpp` to tune our controllers. We will tune the two motors separately.
 
-1. Uncomment `#define MOTOR2` and comment out `#define MOTOR1`.
+1. Uncomment `#define MOTOR1` and comment out `#define MOTOR2`.
 2. Update the parameters under the `#ifdef MOTOR1` section to be the nominal parameters computed from MATLAB. 
 3. Run `lab_code/sinusoidal_input.cpp`.
 4. Open `matlab/TuningPlot.m` in MATLAB. Update the COM port.
