@@ -114,7 +114,7 @@ Additional references:
 - [Github (Example Codes)](https://github.com/mit212/ur_2024)
 - [RTDE API Doc](https://sdurobotics.gitlab.io/ur_rtde/)
 
-In lab, we will perform a supervised run-through of controlling the UR5. Half of the students will participate in this tutorial, while the other half will start the lab. Midway through the lab section, the two halves will switch, so everyone will have a chance to learn about (and try connecting to) the UR5.
+In lab, we will perform a supervised run-through of controlling the UR5.
 
 ## 1 Motor Modelling and Controller Design
 
